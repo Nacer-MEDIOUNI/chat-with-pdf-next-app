@@ -6,7 +6,7 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { uploadToS3 } from "@/lib/db/s3";
+import { uploadToS3 } from "@/lib/s3";
 
 // https://github.com/aws/aws-sdk-js-v3/issues/4126
 
