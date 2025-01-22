@@ -1,34 +1,30 @@
-import { OpenAIApi, Configuration } from "openai-edge";
+import ModelClient from "@azure-rest/ai-inference";
+import { isUnexpected } from "@azure-rest/ai-inference";
+import { AzureKeyCredential } from "@azure/core-auth";
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(config);
+const token = process.env.GITHUB_TOKEN; // Use your GitHub PAT or Azure key
+const endpoint = "https://models.inference.ai.azure.com";
+const modelName = "text-embedding-3-large"; // Replace with your deployment name
 
 export async function getEmbeddings(text: string): Promise<number[]> {
   try {
-    // Call the OpenAI API to get the embeddings
-    const response = await openai.createEmbedding({
-      model: "text-embedding-ada-002",
-      input: text.replace(/\n/g, " "), // Replace newlines with spaces
+    const client = new ModelClient(endpoint, new AzureKeyCredential(token));
+
+    const response = await client.path("/embeddings").post({
+      body: {
+        input: [text.replace(/\n/g, " ")], // Replace newlines with spaces
+        model: modelName,
+      },
     });
 
-    // Convert response to JSON
-    const result = await response.json();
-    
-    // Log the raw response for debugging purposes
-    console.log("Raw response from OpenAI:", result);
-
-    // Check if result.data is an array and has at least one element
-    if (!result.data || !Array.isArray(result.data) || result.data.length === 0) {
-      throw new Error('No embeddings returned or unexpected API response structure');
+    if (isUnexpected(response)) {
+      throw response.body.error;
     }
 
     // Return the embedding data from the first item
-    return result.data[0].embedding as number[];
+    return response.body.data[0].embedding as number[];
   } catch (error) {
-    console.error("Error calling OpenAI embeddings API:", error);
-    throw error; // Re-throw the error after logging it
+    console.error("Error calling Azure AI Inference API:", error);
+    throw error;
   }
 }

@@ -20,7 +20,6 @@ export const getPineconeClient = () => {
   return pc;
 };
 
-
 type PDFPage = {
   pageContent: string;
   metadata: {
@@ -29,7 +28,7 @@ type PDFPage = {
 };
 
 export async function loadS3IntoPinecone(fileKey: string) {
-  // 1. obtain the pdf -> downlaod and read from pdf
+  // 1. Obtain the PDF -> download and read from PDF
   console.log("downloading s3 into file system");
   const file_name = await downloadFromS3(fileKey);
   if (!file_name) {
@@ -39,13 +38,13 @@ export async function loadS3IntoPinecone(fileKey: string) {
   const loader = new PDFLoader(file_name);
   const pages = (await loader.load()) as PDFPage[];
 
-  // 2. split and segment the pdf
+  // 2. Split and segment the PDF
   const documents = await Promise.all(pages.map(prepareDocument));
 
-  // 3. vectorise and embed individual documents
+  // 3. Vectorize and embed individual documents
   const vectors = await Promise.all(documents.flat().map(embedDocument));
 
-  // 4. upload to pinecone
+  // 4. Upload to Pinecone
   const client = await getPineconeClient();
   const pineconeIndex = await client.index("chatpdf");
   const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
@@ -60,6 +59,11 @@ async function embedDocument(doc: Document) {
   try {
     const embeddings = await getEmbeddings(doc.pageContent);
     const hash = md5(doc.pageContent);
+
+    // Ensure the embeddings have the correct dimension (3072 or 1536)
+    if (embeddings.length !== 3072 && embeddings.length !== 1536) {
+      throw new Error(`Embedding dimension mismatch: expected 3072 or 1536, got ${embeddings.length}`);
+    }
 
     return {
       id: hash,
@@ -83,7 +87,7 @@ export const truncateStringByBytes = (str: string, bytes: number) => {
 async function prepareDocument(page: PDFPage) {
   let { pageContent, metadata } = page;
   pageContent = pageContent.replace(/\n/g, "");
-  // split the docs
+  // Split the docs
   const splitter = new RecursiveCharacterTextSplitter();
   const docs = await splitter.splitDocuments([
     new Document({
