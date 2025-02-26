@@ -17,6 +17,7 @@ import {
     createdAt: timestamp("created_at").notNull().defaultNow(),
     userId: varchar("user_id", { length: 256 }).notNull(),
     fileKey: text("file_key").notNull(),
+    pdfText: text("pdf_text"),
   });
   
   export type DrizzleChat = typeof chats.$inferSelect;
