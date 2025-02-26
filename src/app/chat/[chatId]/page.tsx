@@ -25,7 +25,6 @@ export default async function Page({ params: { chatId } }: Props) {
   return (
     <ChatPageClient
       chatId={chatId}
-      userId={userId}
       chatsList={_chats}
       currentChat={currentChat}
     />

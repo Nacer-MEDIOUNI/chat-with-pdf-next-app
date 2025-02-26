@@ -9,9 +9,10 @@ import { useState } from "react";
 
 type HomeProps = {
   userId: string | null;
+  lastChatId: number | null;
 };
 
-export default function Home({ userId }: HomeProps) {
+export default function Home({ userId, lastChatId }: HomeProps) {
   const isAuth = !!userId;
 
   return (
@@ -33,7 +34,15 @@ export default function Home({ userId }: HomeProps) {
                   </Button>
                 </Link>
               ) : (
-                <FileUpload />
+                <div className="">
+                  <FileUpload />
+                  <Link href={`/chat/${lastChatId}`}>
+                    <Button className="mt-4">
+                      Skip to my Chats!
+                      <LogIn className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>

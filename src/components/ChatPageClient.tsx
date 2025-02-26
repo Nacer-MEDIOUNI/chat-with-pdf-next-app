@@ -9,14 +9,12 @@ import { HomeIcon, PlusCircle, SidebarClose, SidebarOpen } from "lucide-react";
 
 type ChatPageClientProps = {
   chatId: string;
-  userId: string;
   chatsList: any[];
   currentChat: any;
 };
 
 const ChatPageClient = ({
   chatId,
-  userId,
   chatsList,
   currentChat,
 }: ChatPageClientProps) => {
