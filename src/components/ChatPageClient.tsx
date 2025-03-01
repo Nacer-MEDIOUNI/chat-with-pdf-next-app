@@ -35,15 +35,15 @@ const ChatPageClient = ({
 
   return (
     <>
-      <div className="flex h-screen overflow-hidden">
-        <div className="flex w-full h-screen overflow-hidden">
+      <div className="flex h-screen overflow-hidden ">
+        <div className="flex flex-col lg:flex-row  w-full h-screen overflow-hidden">
           {/* chat sidebar */}
 
           <div
             className={` ${
               isSidebarOpen
-                ? " flex-[1]   max-w-xs "
-                : "flex h-screen justify-center items-center max-w-xs "
+                ? " flex-[1] border-r-2 border-slate-200 max-w-xs "
+                : "flex  lg:h-screen justify-center items-center  "
             }  `}
           >
             <>
@@ -58,7 +58,7 @@ const ChatPageClient = ({
                   className={`  flex  ${
                     isSidebarOpen
                       ? " bg-white h-fit p-4  w-full items-center justify-around"
-                      : " bg-white h-fit items-center rounded-3xl flex-col gap-2 p-4 border-[1px] "
+                      : " bg-white h-fit items-center rounded-3xl lg:flex-col gap-2 p-4 border-[1px] "
                   }  `}
                 >
                   <Button
@@ -98,11 +98,11 @@ const ChatPageClient = ({
             )}
           </div>
           {/* pdf viewer */}
-          <div className="h-screen p-4 overflow-scroll flex-[5]">
+          <div className="h-screen p-4 overflow-hidden flex-[5]">
             <PDFViewer pdf_url={currentChat?.pdfUrl || ""} />
           </div>
           {/* chat component */}
-          <div className="flex-[3] border-l-4 border-l-slate-200">
+          <div className="flex-[3] border-l-2 border-l-slate-200">
             <ChatComponent chatId={parseInt(chatId)} />
           </div>
         </div>

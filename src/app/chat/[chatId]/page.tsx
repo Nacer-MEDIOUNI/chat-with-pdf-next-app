@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import ChatPageClient from "@/components/ChatPageClient";
+import { getMessagesByChatId } from "@/lib/db/queries";
 
 type Props = {
   params: {

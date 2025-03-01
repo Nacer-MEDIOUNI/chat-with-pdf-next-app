@@ -9,18 +9,16 @@ type Props = {
 };
 
 const MessageList = ({ messages, isLoading }: Props) => {
-  // console.log(messages, "messages");
-  // if (isLoading) {
-  //   return (
-  //     <div className="relative flex justify-center items-center w-full -translate-x-1/2 -translate-y-1/2">
-  //       <Loader2 className="w-6 h-6 animate-spin" />
-  //     </div>
-  //   );
-  // }
-  // if (!messages) return <></>;
-
+  if (isLoading) {
+    return (
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <Loader2 className="w-6 h-6 animate-spin" />
+      </div>
+    );
+  }
+  if (!messages) return <></>;
   return (
-    <div className="flex h-[80%] flex-col gap-2 pb-4 px-4">
+    <div className="flex flex-col gap-2 px-4">
       {messages.map((message) => {
         return (
           <div
