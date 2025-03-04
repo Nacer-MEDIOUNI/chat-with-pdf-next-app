@@ -7,6 +7,7 @@ import { MessageCircle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import FileUploadModal from "./FileUploadModal";
 import ConfirmationModal from "./ConfirmationModal";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 // Define Props type
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 const ChatSideBar = ({ chats, chatId, isModalOpen, setIsModalOpen }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [chatToDelete, setChatToDelete] = useState<number | null>(null);
+  const router = useRouter(); // Initialize useRouter
 
   // Function to handle delete
   const handleDeleteChat = async (chatId: number) => {
@@ -31,8 +33,27 @@ const ChatSideBar = ({ chats, chatId, isModalOpen, setIsModalOpen }: Props) => {
         throw new Error("Failed to delete chat");
       }
 
-      // Refresh the page or update the chat list
-      window.location.reload(); // Reload the page to reflect the changes
+      // Find the index of the deleted chat
+      const deletedChatIndex = chats.findIndex((chat) => chat.id === chatId);
+
+      // Determine the next chat to redirect to
+      let nextChatId = null;
+      if (chats.length > 1) {
+        if (deletedChatIndex === chats.length - 1) {
+          // If the deleted chat was the last one, redirect to the previous chat
+          nextChatId = chats[deletedChatIndex - 1].id;
+        } else {
+          // Otherwise, redirect to the next chat
+          nextChatId = chats[deletedChatIndex + 1].id;
+        }
+      }
+
+      // Redirect to the next chat or home page if no chats are left
+      if (nextChatId) {
+        router.push(`/chat/${nextChatId}`);
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       console.error("Error deleting chat:", error);
     }

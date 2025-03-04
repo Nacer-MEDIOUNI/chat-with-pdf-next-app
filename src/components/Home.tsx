@@ -49,16 +49,18 @@ export default function Home({ userId, lastChatId }: HomeProps) {
                   ) : (
                     <div className="">
                       <FileUpload />
-                      <Link href={`/chat/${lastChatId}`}>
-                        <Button className="my-4 bg-transparent  underline hover:no-underline hover:bg-transparent">
-                          Skip to my Chats!
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
-                      </Link>
+                      {lastChatId && (
+                        <Link href={`/chat/${lastChatId}`}>
+                          <Button className="my-4 bg-transparent  underline hover:no-underline hover:bg-transparent">
+                            Skip to my Chats!
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                   )}
                 </div>
-                <p className="max-w-xl mt-1 text-xs lg:text-sm">
+                <p className="max-w-xl mt-4 text-xs lg:text-sm">
                   Join millions of students, researchers and professionals to
                   instantly answer questions and understand research with AI
                 </p>
